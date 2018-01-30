@@ -1,5 +1,5 @@
 <%@page import="HelperClasses.Member"%>
-<%@page import="java.net.URLDecoder"%>
+<%@page import="java.net.*"%>
 <%@page import="HelperClasses.Furniture"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -30,9 +30,9 @@
             List<StoreEntity> storesInCountry = (List<StoreEntity>) session.getAttribute("storesInCountry");
             List<Furniture> furnitures = (List<Furniture>) (session.getAttribute("furnitures"));
             Furniture furniture = new Furniture();
-            for (Furniture f : furnitures) {
-                if (f.getSKU().equals(sku)) {
-                    furniture = f;               
+            for(Furniture f : furnitures){
+                if(f.getSKU().equals(sku)){
+                    furniture = f;
                 }
             }
         %>
@@ -71,10 +71,16 @@
                                         <input type="hidden" name="price" value="<%=furniture.getPrice()%>"/>
                                         <input type="hidden" name="name" value="<%=furniture.getName()%>"/>
                                         <input type="hidden" name="imageURL" value="<%=furniture.getImageUrl()%>"/>
+                                        <input type="hidden" name="category" value="<%=furniture.getCategory()%>"/>
+                                        <input type="hidden" name="fromJsp" value="yes" />
+                                        <input type="hidden" name="quantity" value="1" />
                                         <input type="submit" name="btnEdit" class="btn btn-primary" id="<%=furniture.getId()%>" value="Add To Cart"/>
                                     </form>
                                     <%}%>
-                                    <p class="price"><h4 class="amount">$<%=furniture.getPrice()%></h4></p>
+                                    <%
+                                        String normalPrice = "$" + furniture.getPrice() + "0";
+                                    %>
+                                    <p class="price"><h4 class="amount"><%=normalPrice%></h4></p>
                                     <strong>Description</strong>
                                     <p class="taller">
                                         <%=furniture.getDescription()%>
@@ -85,7 +91,7 @@
                                         Width: <%=furniture.getWidth()%>
                                     </p>
                                     <div class="product_meta">
-                                        <span class="posted_in">Category: <a rel="tag" href="../../ECommerce_FurnitureCategoryServlet?cat=<%=furniture.getCategory().replace(" & ","+%26+")%>"><%=furniture.getCategory()%></a></span>
+                                        <span class="posted_in">Category: <a rel="tag" href="../../ECommerce_FurnitureCategoryServlet?cat=<%=URLEncoder.encode(furniture.getCategory())%>"><%=furniture.getCategory()%></a></span>
                                     </div>
                                     <br/><br/>
 
