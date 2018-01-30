@@ -38,7 +38,7 @@
                         </div>
                     </section>
                     <div class="container">
-
+                        <jsp:include page="/displayMessageLong.jsp" />
                         <div class="row">
                             <div class="col-md-6">
                                 <h2 class="shorter"><strong><%=category%></strong></h2>
@@ -48,36 +48,40 @@
                             <ul class="products product-thumb-info-list" data-plugin-masonry>
                                 <%
                                     try {
-                                        /**
-                                         * *insert code here**
-                                         */
+                                        for(Furniture f : furnitures) {
                                 %>
                                 <li class="col-md-3 col-sm-6 col-xs-12 product">
                                     <span class="product-thumb-info">
                                         <span class="product-thumb-info-image">
-                                            <img alt="" class="img-responsive" src="../../..<%=furnitures.get(0).getImageUrl()%>">
+                                            <span class="product-thumb-info-act">                                                
+                                                <span class="product-thumb-info-act-left"><a href="furnitureProductDetails.jsp?sku=<%=f.getSKU()%>" style="color: white"><em>View Details</em></a></span>
+                                            </span>
+                                            <img alt=""  class="img-responsive" src="../../..<%=f.getImageUrl()%>">
                                         </span>
 
                                         <span class="product-thumb-info-content">
-                                            <h4><%=furnitures.get(0).getName()%></h4>
-                                            <span class="product-thumb-info-act-left"><em>Height: <%=furnitures.get(0).getHeight()%></em></span><br/>
-                                            <span class="product-thumb-info-act-left"><em>Length: <%=furnitures.get(0).getLength()%></em></span><br/>
-                                            <span class="product-thumb-info-act-left"><em>Width: <%=furnitures.get(0).getWidth()%></em></span><br/>
-                                            <span class="product-thumb-info-act-left"><em>Price: $<%=furnitures.get(0).getPrice()%>0</em></span>
+                                            <h4><%=f.getName()%></h4>
+                                            <span class="product-thumb-info-act-left"><em>Height: <%=f.getHeight()%></em></span><br/>
+                                            <span class="product-thumb-info-act-left"><em>Length: <%=f.getLength()%></em></span><br/>
+                                            <span class="product-thumb-info-act-left"><em>Width: <%=f.getWidth()%></em></span><br/>
+                                            <span class="product-thumb-info-act-left"><em>Price: $<%=f.getPrice()%>0</em></span>
                                             <br/>
                                             <form action="furnitureProductDetails.jsp">
-                                                <input type="hidden" name="sku" value="<%=furnitures.get(0).getSKU()%>"/>
+                                                <input type="hidden" name="sku" value="<%=f.getSKU()%>"/>
                                                 <input type="submit" class="btn btn-primary btn-block" value="More Details"/>
                                             </form>
                                             <%
                                                 if (isMemberLoggedIn == true) {
                                             %>
                                             <form action="../../ECommerce_AddFurnitureToListServlet">
-                                                <input type="hidden" name="id" value="<%=furnitures.get(0).getId()%>"/>
-                                                <input type="hidden" name="SKU" value="<%=furnitures.get(0).getSKU()%>"/>
-                                                <input type="hidden" name="price" value="<%=furnitures.get(0).getPrice()%>"/>
-                                                <input type="hidden" name="name" value="<%=furnitures.get(0).getName()%>"/>
-                                                <input type="hidden" name="imageURL" value="<%=furnitures.get(0).getImageUrl()%>"/>
+                                                <input type="hidden" name="id" value="<%=f.getId()%>"/>
+                                                <input type="hidden" name="SKU" value="<%=f.getSKU()%>"/>
+                                                <input type="hidden" name="price" value="<%=f.getPrice()%>"/>
+                                                <input type="hidden" name="name" value="<%=f.getName()%>"/>
+                                                <input type="hidden" name="imageURL" value="<%=f.getImageUrl()%>"/>
+                                                <input type="hidden" name="category" value="<%=category%>"/>
+                                                <input type="hidden" name="fromJsp" value="yes" />
+                                                <input type="hidden" name="quantity" value="1" />
                                                 <input type="submit" name="btnEdit" class="btn btn-primary btn-block" value="Add To Cart"/>
                                             </form>
                                             <%
@@ -87,10 +91,11 @@
                                     </span>
                                 </li>
                                 <%
-                                    } catch (Exception ex) {
-                                        System.out.println(ex);
-                                        ex.printStackTrace();
                                     }
+                                        } catch (Exception ex) {
+                                            System.out.println(ex);
+                                            ex.printStackTrace();
+                                        }
                                 %>
                             </ul>
                         </div>
