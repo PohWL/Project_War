@@ -197,7 +197,7 @@
                                             </form>
 
 
-                                            <form id="makePaymentForm" action="../../ECommerce_OrderServlet" name="makePaymentForm" method="post" hidden>
+                                            <form id="makePaymentForm" action="../../ECommerce_PaymentServlet" name="makePaymentForm" method="post" hidden>
                                                 <div class="col-md-8">
                                                     <br>
                                                     <br>
