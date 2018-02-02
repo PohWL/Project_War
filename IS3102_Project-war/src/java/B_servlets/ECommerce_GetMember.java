@@ -7,8 +7,10 @@ package B_servlets;
  */
 
 import HelperClasses.Member;
+import HelperClasses.ShoppingCartLineItem;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,9 +39,12 @@ public class ECommerce_GetMember extends HttpServlet {
         try{
             String memberEmail = session.getAttribute("memberEmail").toString();
             if(!memberEmail.equals("")){
-                Member mem = getMember(memberEmail);
+                Member mem = getMemberEntityRESTful(memberEmail);
                 session.setAttribute("member", mem);
                 session.setAttribute("memberName", mem.getName());
+                
+                ArrayList<ShoppingCartLineItem> itemList = getOrderItem(mem.getId());
+                session.setAttribute("orderItem", itemList);
                 response.sendRedirect("/IS3102_Project-war/B/SG/memberProfile.jsp");
             }
         }catch(Exception ex){
@@ -47,7 +52,7 @@ public class ECommerce_GetMember extends HttpServlet {
         }
     }
     
-    public Member getMember(String email) {
+    public Member getMemberEntityRESTful(String email) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client
                 .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity").path("getMember")
@@ -63,6 +68,24 @@ public class ECommerce_GetMember extends HttpServlet {
         Member member = response.readEntity(new GenericType<Member>() {
         });
         return member;
+    }
+    
+    public ArrayList<ShoppingCartLineItem> getOrderItem(long memId){
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client
+                .target("http://localhost:8080/IS3102_WebService-Student/webresources/entity.memberentity").path("getOrderItem")
+                .queryParam("memberId", memId);
+        Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+        Response response = invocationBuilder.get();
+        System.out.println("get bought item status: " + response.getStatus());
+
+        if (response.getStatus() != 200) {
+            return null;
+        }
+
+        ArrayList<ShoppingCartLineItem> item = response.readEntity(new GenericType<ArrayList<ShoppingCartLineItem>>() {
+        });
+        return item;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
